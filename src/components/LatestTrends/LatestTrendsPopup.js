@@ -2,7 +2,7 @@ import React from 'react';
 import './LatestTrendsPopup.css';
 
 const LatestTrendsPopup = ({ products }) => {
-    console.log(products)
+   
     return (
         <div className='latest-trends'>
             <div className='latest'>

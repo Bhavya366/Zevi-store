@@ -11,13 +11,9 @@ function App() {
   const [latestTrendsOpen, setLatestTrendsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [visible,setVisible] = useState(true)
 
-
-  const handleSearch = (query) => {
-    setSearchQuery(query);
-    setLatestTrendsOpen(false);
-    setFiltersOpen(true);
-  };
+  
 
   const generateProduct = (i) => {
     return {
@@ -29,7 +25,7 @@ function App() {
       }),
       price: parseFloat(faker.commerce.price()),
       description: faker.lorem.sentences(),
-      rating: parseFloat(faker.finance.amount(1, 5, 2)),
+      rating: parseInt(faker.finance.amount(1, 5)),
       brand: faker.commerce.productName().includes("T") ? "H&M" : "Mango",
       wishlist: false,
     };
@@ -43,17 +39,7 @@ function App() {
     return products;
   };
 
-  useEffect(() => {
-    // Open the LatestTrendsPopup after 3 seconds
-    const timer = setTimeout(() => {
-      setLatestTrendsOpen(true);
-    }, 3000);
-
-    return () => {
-      // Clear the timer if the component unmounts before the 3 seconds
-      clearTimeout(timer);
-    };
-  }, []);
+  
 
   const [products, setProducts] = useState(generateProducts(40))
   // Sort the products by rating in descending order
@@ -68,11 +54,12 @@ function App() {
       <div className="top-right-image">
         <img src={zevi} alt="Top Right" />
       </div>
-      <div className="search-bar" style={filtersOpen ?{border:"2px solid grey"}:{border:"none"}}>
+      {visible && <div className="search-bar" style={filtersOpen ?{border:"2px solid grey"}:{border:"none"}}>
         <input type="text" placeholder="Search" onClick={() => setLatestTrendsOpen(true)}
-          onChange={(e) => { handleSearch(e.target.value) }} />
+          onChange={(e) => { setSearchQuery(e.target.value); setVisible(false);setLatestTrendsOpen(false); setFiltersOpen(true);}} />
+          
         <img src={searchicon} alt="" />
-      </div>
+      </div>}
       {latestTrendsOpen && <LatestTrendsPopup products={top5Products} />}
       {filtersOpen && <FiltersPopup searchQuery={searchQuery} products={products}/>}
     </div>
